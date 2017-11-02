@@ -13,3 +13,4 @@
 
 # built gem file
 *.gem
+install-gem.sh

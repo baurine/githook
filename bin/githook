@@ -2,6 +2,9 @@
 
 require "githook"
 
-# TODO: polish
-task = ARGV[0]
-Rake::Task[task].invoke
+task_name = ARGV[0]
+begin
+  Rake::Task[task_name].invoke
+rescue => e
+  puts "Error: #{e.message}"
+end
