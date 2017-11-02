@@ -37,6 +37,3 @@ esac
 
 # custom prepare-commit-msg hooks
 githook prepare_commit_msg
-if [ $? -ne 0 ]; then
-  exit 1
-fi

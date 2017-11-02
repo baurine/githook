@@ -13,3 +13,6 @@
 
 # built gem file
 *.gem
+
+# hooks
+.githook

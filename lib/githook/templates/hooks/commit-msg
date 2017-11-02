@@ -25,6 +25,3 @@ test "" = "$(grep '^Signed-off-by: ' "$1" |
 
 # custom commit-msg hooks
 githook commit_msg
-if [ $? -ne 0 ]; then
-  exit 1
-fi
