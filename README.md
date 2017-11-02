@@ -2,6 +2,19 @@
 
 A ruby gem that help to setup git hooks easily, base on Rake, inspired from Capistrano.
 
+## TODO
+
+- [x] install task
+- [x] setup hooks task
+- [x] clear hooks task
+- [ ] help task
+- [ ] disable/enable task
+- [x] pre-commit hook tasks
+- [x] prepare-commit-msg hook tasks
+- [x] commit-msg hook tasks
+- [x] implement as a gem
+- [ ] more document
+
 ## Installation
 
 Add this line to your application's Gemfile:
