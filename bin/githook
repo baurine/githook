@@ -1,3 +1,7 @@
 #!/usr/bin/env ruby
 
-puts ARGV
+require "githook"
+
+# TODO: polish
+task = ARGV[0]
+Rake::Task[task].invoke
