@@ -4,6 +4,11 @@ module Githook
       puts "[#{Time.now.strftime('%H:%m:%S')}] #{task_name.gsub('_', ' ')}"
     end
 
+    def self.run_tasks(hook_stage)
+      # TODO
+      puts hook_stage
+    end
+
     #######################################################
 
     def self.interactive_delete_files(path_arr, type)
