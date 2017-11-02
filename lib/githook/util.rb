@@ -5,8 +5,10 @@ module Githook
     end
 
     def self.run_tasks(hook_stage)
-      # TODO
-      puts hook_stage
+      tasks = fetch(hook_stage, [])
+      tasks.each do |task|
+        Rake::Task[task].invoke
+      end
     end
 
     #######################################################
