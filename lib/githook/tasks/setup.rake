@@ -103,3 +103,22 @@ task :enable do
     end
   end
 end
+
+desc 'list all hooks'
+task :list do
+  enabled_hooks = []
+  disabled_hooks = []
+  ALL_HOOKS.each do |hook|
+    hook_path = File.join('.git/hooks', hook.gsub('_', '-'))
+    disable_path = hook_path + '.disable'
+    if File.file?(hook_path)
+      enabled_hooks << hook
+    elsif File.file?(disable_path)
+      disabled_hooks << hook
+    end
+  end
+  puts "Enabled hooks:"
+  enabled_hooks.each { |h| puts "  * #{h}" }
+  puts "Disabled hooks:"
+  disabled_hooks.each { |h| puts "  * #{h}" }
+end
