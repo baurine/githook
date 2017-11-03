@@ -53,43 +53,50 @@ end
 #   Githook::Util.interactive_delete_files(hooks, 'hooks')
 # end
 
-ALL_HOOKS = %w(
-  applypatch_msg
-  pre_applypatch
-  post_applypatch
-  pre_commit
-  prepare_commit_msg
-  commit_msg
-  post_commit
-  pre_rebase
-  post_checkout
-  post_merge
-  pre_receive
-  post_receive
-  update
-  post_update
-  pre_auto_gc
-  post_rewrite
-)
+# all hooks
+# https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
+# ALL_HOOKS = %w(
+#   pre_commit
+#   prepare_commit_msg
+#   commit_msg
+#   post_commit
+#   pre_rebase
+#   post_checkout
+#   post_merge
+#   pre_push
+#   applypatch_msg
+#   pre_applypatch
+#   post_applypatch
+#   pre_receive
+#   post_receive
+#   update
+#   post_update
+# )
 
-desc 'Disable hooks: HOOKS=pre_commit,commit_msg githook disable'
+desc 'Disable hooks: [HOOKS=pre_commit,commit_msg] githook disable'
 task :disable do
-  target_hooks = (ENV['HOOKS'] || '').split(',') || ALL_HOOKS
+  target_hooks = (ENV['HOOKS'] || '').split(',')
+  target_hooks = Githook::Util.all_hooks if target_hooks.empty?
+
   target_hooks.each do |hook|
     hook_path = File.join('.git/hooks', hook.gsub('_', '-'))
+    disable_path = hook_path + '.disable'
     if File.file?(hook_path)
-      disable_path = hook_path + '.disable'
       FileUtils.mv(hook_path, disable_path)
       puts "Disable #{hook} hook."
+    elsif File.file?(disable_path)
+      puts "#{hook} is already disabled, skip."
     else
       puts "#{hook} hook doesn't exist, skip."
     end
   end
 end
 
-desc 'Enable hooks: HOOKS=pre_commit,commit_msg githook enable'
+desc 'Enable hooks: [HOOKS=pre_commit,commit_msg] githook enable'
 task :enable do
-  target_hooks = (ENV['HOOKS'] || '').split(',') || ALL_HOOKS
+  target_hooks = (ENV['HOOKS'] || '').split(',')
+  target_hooks = Githook::Util.all_hooks if target_hooks.empty?
+
   target_hooks.each do |hook|
     hook_path = File.join('.git/hooks', hook.gsub('_', '-'))
     disable_path = hook_path + '.disable'
@@ -108,7 +115,8 @@ desc 'List all hooks'
 task :list do
   enabled_hooks = []
   disabled_hooks = []
-  ALL_HOOKS.each do |hook|
+  all_hooks = Githook::Util.all_hooks
+  all_hooks.each do |hook|
     hook_path = File.join('.git/hooks', hook.gsub('_', '-'))
     disable_path = hook_path + '.disable'
     if File.file?(hook_path)

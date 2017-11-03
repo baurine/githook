@@ -37,6 +37,25 @@ module Githook
 
     #######################################################
 
+    # def self.enabled_hooks
+    #   Dir.glob('.git/hooks/*')
+    #      .map { |path| path.split('/').last }
+    #      .reject { |name| name.include?('.') }
+    #      .map { |name| name.gsub('-', '_') }
+    # end
+
+    # include enabled_hooks and disabled_hooks
+    def self.all_hooks
+      Dir.glob('.git/hooks/*')
+         .map { |path| path.split('/').last }
+         .select { |name| !name.include?('.') || name.include?('.disable') }
+         .map { |name| name.gsub('.disable', '') }
+         .uniq
+         .map { |name| name.gsub('-', '_') }
+    end
+
+    #######################################################
+
     # check whether origin commit msg is empty
     def self.commit_msg_empty?(commit_msg_file)
       File.open(commit_msg_file, 'r') do |f|
