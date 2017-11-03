@@ -7,8 +7,9 @@ A ruby gem that help to setup git hooks easily, base on Rake, inspired from Capi
 - [x] install task
 - [x] setup hooks task
 - [x] clear hooks task
-- [ ] help task
-- [ ] disable/enable task
+- [x] disable/enable hooks task
+- [x] list hooks task
+- [x] version/help task
 - [x] pre-commit hook tasks
 - [x] prepare-commit-msg hook tasks
 - [x] commit-msg hook tasks
@@ -33,6 +34,7 @@ Or install it yourself as:
 
 ## Usage
 
+    $ githook help
     $ githook install
     $ githook setup
 
