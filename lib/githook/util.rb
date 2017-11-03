@@ -7,7 +7,11 @@ module Githook
     def self.run_tasks(hook_stage)
       tasks = fetch(hook_stage, [])
       tasks.each do |task|
-        Rake::Task[task].invoke
+        if Rake::Task.task_defined?(task)
+          Rake::Task[task].invoke
+        else
+          puts "#{task} task doesn't exist."
+        end
       end
     end
 
