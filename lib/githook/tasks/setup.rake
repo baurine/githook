@@ -1,7 +1,5 @@
 desc 'setup hooks'
-task :setup do |t|
-  Githook::Util.log(t.name)
-
+task :setup do
   # setup 1, check whether has '.githook/hooks' and '.git' folder
   hooks_path = '.githook/hooks'
   unless Dir.exists?(hooks_path)
@@ -16,16 +14,15 @@ task :setup do |t|
   end
 
   # setup 2, backup hooks
-  Rake::Task[:backup_hooks].invoke
+  puts "Backup old hooks:"
+  Rake::Task[:backup].invoke
 
   # setup 3, copy hooks to .git/hooks
   FileUtils.cp_r(hooks_path, git_path)
 end
 
 desc 'backup old hooks in .git/hooks'
-task :backup_hooks do |t|
-  Githook::Util.log(t.name)
-
+task :backup do
   has_backup = false
   Dir.glob('.git/hooks/*').each do |path|
     file_name = path.split('/').last
@@ -41,18 +38,68 @@ task :backup_hooks do |t|
 end
 
 desc 'clear backup hooks in .git/hooks'
-task :clear_backup do |t|
-  Githook::Util.log(t.name)
-
+task :clear_backup do
   backup = Dir.glob('.git/hooks/*.bak')
   Githook::Util.interactive_delete_files(backup, 'backup hooks')
 end
 
-desc 'clear all hooks (include backup) in .git/hooks'
-task :clear => :clear_backup do |t|
-  Githook::Util.log(t.name)
+# later I think we don't need to clear hooks, use disable/enable replace them
+# desc 'clear all hooks (include backup) in .git/hooks'
+# task :clear => :clear_backup do |t|
+#   Githook::Util.log(t.name)
 
-  hooks = Dir.glob('.git/hooks/*')
-             .reject { |path| path.split('/').last.include?('.') }
-  Githook::Util.interactive_delete_files(hooks, 'hooks')
+#   hooks = Dir.glob('.git/hooks/*')
+#              .reject { |path| path.split('/').last.include?('.') }
+#   Githook::Util.interactive_delete_files(hooks, 'hooks')
+# end
+
+ALL_HOOKS = %w(
+  applypatch_msg
+  pre_applypatch
+  post_applypatch
+  pre_commit
+  prepare_commit_msg
+  commit_msg
+  post_commit
+  pre_rebase
+  post_checkout
+  post_merge
+  pre_receive
+  post_receive
+  update
+  post_update
+  pre_auto_gc
+  post_rewrite
+)
+
+desc 'disable hooks: HOOKS=pre_commit,commit_msg githook disable'
+task :disable do
+  target_hooks = (ENV['HOOKS'] || '').split(',') || ALL_HOOKS
+  target_hooks.each do |hook|
+    hook_path = File.join('.git/hooks', hook.gsub('_', '-'))
+    if File.file?(hook_path)
+      disable_path = hook_path + '.disable'
+      FileUtils.mv(hook_path, disable_path)
+      puts "Disable #{hook} hook."
+    else
+      puts "#{hook} hook doesn't exist, skip."
+    end
+  end
+end
+
+desc 'enable hooks: HOOKS=pre_commit,commit_msg githook enable'
+task :enable do
+  target_hooks = (ENV['HOOKS'] || '').split(',') || ALL_HOOKS
+  target_hooks.each do |hook|
+    hook_path = File.join('.git/hooks', hook.gsub('_', '-'))
+    disable_path = hook_path + '.disable'
+    if File.file?(hook_path)
+      puts "#{hook} hook is arleady enabled, skip."
+    elsif File.file?(disable_path)
+      FileUtils.mv(disable_path, hook_path)
+      puts "Enable #{hook} hook."
+    else
+      puts "#{hook} hook doesn't exist, skip."
+    end
+  end
 end
