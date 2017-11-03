@@ -5,12 +5,16 @@ namespace :prepare_commit_msg do
 
     commit_msg_file = '.git/COMMIT_EDITMSG'
     # can't use return in block
-    exit 0 unless Githook::Util.commit_msg_empty?(commit_msg_file)
+    # can't "exit 0" in advance, else will abort later tasks
+    # but we can "exit 1" in advance
+    # exit 0 unless Githook::Util.commit_msg_empty?(commit_msg_file)
 
-    branch_name = `git symbolic-ref --short HEAD`
-    pre_msg = Githook::Util.gen_pre_msg(branch_name)
-    puts "pre-msg: #{pre_msg}"
-    Githook::Util.prefill_msg(commit_msg_file, pre_msg)
+    if Githook::Util.commit_msg_empty?(commit_msg_file)
+      branch_name = `git symbolic-ref --short HEAD`
+      pre_msg = Githook::Util.gen_pre_msg(branch_name)
+      puts "pre-msg: #{pre_msg}"
+      Githook::Util.prefill_msg(commit_msg_file, pre_msg)
+    end
   end
 end
 
