@@ -13,7 +13,7 @@ namespace :commit_msg do
 
     unless Githook::Util.expected_msg_format?(commit_msg)
       puts "ERROR! commit failed, commit msg doesn't match the required format"
-      puts "expected msg format: FEAUTER|BUG|MISC|REFACTOR #issue_num - Content"
+      puts "expected msg format: #{Githook::Util::MSG_FORMAT}"
       exit 1
     end
   end

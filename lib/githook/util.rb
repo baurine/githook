@@ -91,7 +91,8 @@ module Githook
       commit_msg
     end
 
-    MSG_FORMAT_REG = /^(FEATURE|BUG|MISC|REFACTOR)(\s#\d+)* - ([A-Z].*)/
+    MSG_FORMAT_REG = /^(FEATURE|BUG|MISC|REFACTOR|WIP)(\s#\d+)* - ([A-Z].*)/
+    MSG_FORMAT = "FEAUTER|BUG|MISC|REFACTOR|WIP #issue_num - Content"
     # check commit msg style
     def self.expected_msg_format?(commit_msg)
       commit_msg.start_with?('Merge branch') || MSG_FORMAT_REG.match(commit_msg)
