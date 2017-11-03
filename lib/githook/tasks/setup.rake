@@ -1,28 +1,38 @@
-desc 'Setup hooks'
-task :setup do
-  # setup 1, check whether has '.githook/hooks' and '.git' folder
+desc 'Check where .githook folder exists'
+task :check_githook_folder do
   hooks_path = '.githook/hooks'
   unless Dir.exists?(hooks_path)
     puts "There isn't a .githook/hooks folder."
     exit 1
   end
+end
 
-  git_path = '.git'
+desc 'Check where .git folder exists'
+task :check_git_folder do
+  git_path = '.git/hooks'
   unless Dir.exists?(git_path)
-    puts "There isn't a .git folder."
+    puts "There isn't a .git/hooks folder."
     exit 1
   end
+end
+
+#################################################################
+
+desc 'Setup hooks'
+task :setup => [:check_githook_folder, :check_git_folder] do
+  # setup 1, check whether has '.githook/hooks' and '.git' folder
+  # => [:check_githook_folder, :check_git_folder]
 
   # setup 2, backup hooks
   puts "Backup old hooks:"
   Rake::Task[:backup].invoke
 
   # setup 3, copy hooks to .git/hooks
-  FileUtils.cp_r(hooks_path, git_path)
+  FileUtils.cp_r('.githook/hooks', '.git')
 end
 
 desc 'Backup old hooks in .git/hooks'
-task :backup do
+task :backup => :check_git_folder do
   has_backup = false
   Dir.glob('.git/hooks/*').each do |path|
     file_name = path.split('/').last
@@ -38,7 +48,7 @@ task :backup do
 end
 
 desc 'Clear backup hooks in .git/hooks'
-task :clear_backup do
+task :clear_backup => :check_git_folder do
   backup = Dir.glob('.git/hooks/*.bak')
   Githook::Util.interactive_delete_files(backup, 'backup hooks')
 end
@@ -74,7 +84,7 @@ end
 # )
 
 desc 'Disable hooks: [HOOKS=pre_commit,commit_msg] githook disable'
-task :disable do
+task :disable => :check_git_folder do
   target_hooks = (ENV['HOOKS'] || '').split(',')
   target_hooks = Githook::Util.all_hooks if target_hooks.empty?
 
@@ -93,7 +103,7 @@ task :disable do
 end
 
 desc 'Enable hooks: [HOOKS=pre_commit,commit_msg] githook enable'
-task :enable do
+task :enable => :check_git_folder do
   target_hooks = (ENV['HOOKS'] || '').split(',')
   target_hooks = Githook::Util.all_hooks if target_hooks.empty?
 
@@ -112,7 +122,7 @@ task :enable do
 end
 
 desc 'List all hooks'
-task :list do
+task :list => :check_git_folder do
   enabled_hooks = []
   disabled_hooks = []
   all_hooks = Githook::Util.all_hooks
