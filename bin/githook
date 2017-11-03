@@ -2,9 +2,9 @@
 
 require "githook"
 
-task_name = ARGV[0]
-begin
+task_name = ARGV[0] || 'help'
+if Rake::Task.task_defined?(task_name)
   Rake::Task[task_name].invoke
-rescue => e
-  puts "Error: #{e.message}"
+else
+  puts "Error: #{task_name} task doesn't exist"
 end

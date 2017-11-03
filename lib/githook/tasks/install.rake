@@ -1,4 +1,5 @@
-task :install do |t|
+desc 'Init githook, prepare template files'
+task :install do
   # step 1, check whether Dir.pwd is in git repo root folder
   git_path = ".git"
   unless Dir.exists?(git_path)

@@ -1,4 +1,4 @@
-desc 'setup hooks'
+desc 'Setup hooks'
 task :setup do
   # setup 1, check whether has '.githook/hooks' and '.git' folder
   hooks_path = '.githook/hooks'
@@ -21,7 +21,7 @@ task :setup do
   FileUtils.cp_r(hooks_path, git_path)
 end
 
-desc 'backup old hooks in .git/hooks'
+desc 'Backup old hooks in .git/hooks'
 task :backup do
   has_backup = false
   Dir.glob('.git/hooks/*').each do |path|
@@ -37,7 +37,7 @@ task :backup do
   puts "you can run 'rake clear_backup' to delete these backup" if has_backup
 end
 
-desc 'clear backup hooks in .git/hooks'
+desc 'Clear backup hooks in .git/hooks'
 task :clear_backup do
   backup = Dir.glob('.git/hooks/*.bak')
   Githook::Util.interactive_delete_files(backup, 'backup hooks')
@@ -72,7 +72,7 @@ ALL_HOOKS = %w(
   post_rewrite
 )
 
-desc 'disable hooks: HOOKS=pre_commit,commit_msg githook disable'
+desc 'Disable hooks: HOOKS=pre_commit,commit_msg githook disable'
 task :disable do
   target_hooks = (ENV['HOOKS'] || '').split(',') || ALL_HOOKS
   target_hooks.each do |hook|
@@ -87,7 +87,7 @@ task :disable do
   end
 end
 
-desc 'enable hooks: HOOKS=pre_commit,commit_msg githook enable'
+desc 'Enable hooks: HOOKS=pre_commit,commit_msg githook enable'
 task :enable do
   target_hooks = (ENV['HOOKS'] || '').split(',') || ALL_HOOKS
   target_hooks.each do |hook|
@@ -104,7 +104,7 @@ task :enable do
   end
 end
 
-desc 'list all hooks'
+desc 'List all hooks'
 task :list do
   enabled_hooks = []
   disabled_hooks = []
@@ -121,4 +121,32 @@ task :list do
   enabled_hooks.each { |h| puts "  * #{h}" }
   puts "Disabled hooks:"
   disabled_hooks.each { |h| puts "  * #{h}" }
+end
+
+desc 'Version'
+task :version do
+  puts Githook::VERSION
+end
+
+TASKS_NAME = %w(
+  install
+  setup
+  backup
+  clear_backup
+  disable
+  enable
+  list
+  version
+  help
+)
+desc 'Help'
+task :help do
+  puts
+  puts "Usage: githook task_name"
+  puts
+  puts "task_name:"
+  TASKS_NAME.each do |task_name|
+    task = Rake::Task[task_name]
+    puts "  #{task_name.ljust(13)} -- #{task.comment}"
+  end
 end
