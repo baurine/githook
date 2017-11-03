@@ -2,16 +2,16 @@ desc 'setup hooks'
 task :setup do |t|
   Githook::Util.log(t.name)
 
-  # setup 1, check whether has '.git-hooks/hooks' and '.git' folder
+  # setup 1, check whether has '.githook/hooks' and '.git' folder
   hooks_path = '.githook/hooks'
   unless Dir.exists?(hooks_path)
-    puts "There isn't .git-hooks/hooks folder."
+    puts "There isn't a .githook/hooks folder."
     exit 1
   end
 
   git_path = '.git'
   unless Dir.exists?(git_path)
-    puts "There isn't .git folder."
+    puts "There isn't a .git folder."
     exit 1
   end
 
