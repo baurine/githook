@@ -61,7 +61,7 @@ module Githook
     end
 
     def self.branch_name
-      `git symbolic-ref --short HEAD`
+      `git symbolic-ref --short HEAD`.strip
     end
 
     def self.get_commit_msg(commit_msg_file)

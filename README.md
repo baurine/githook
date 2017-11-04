@@ -14,7 +14,7 @@ A ruby gem that help to setup git hooks easily, base on Rake, inspired from Capi
 - [x] prepare-commit-msg hook tasks
 - [x] commit-msg hook tasks
 - [x] implement as a gem
-- [ ] more document
+- [x] more document
 
 ## Installation
 
@@ -193,7 +193,40 @@ The `commit_msg:check_msg` is defined in `tasks/commit-msg.rake`, it is executed
 
 ## Customize yourself task
 
-TODO:
+The default `pre_commit:rubocp`, `pre_commit:rspec` tasks will help you check ruby code style and test ruby code before commit, the `prepare_commit_msg:prepare` task will help auto generate commit message according branch name when commit code, the `commit_msg:check_msg` task will help check commit message style after save the commit message.
+
+If you don't like these default behaviors, for example you have your own commit message style, or you want to add more checks, for example you want to be more strict in the branch name, you can't name a branch arbitrarily, it must follow some rules, it should be any of `develop/staging/master`, `/^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/`, let's try to implement this custom task.
+
+We can define it in any rake file in `.githook/tasks` folder, there is already an empty `task.rake` file, so let's just define in it. It should work in `pre-commit` hook, so let's define it in `:pre_commit` namespace.
+
+    # .githook/tasks/task.rake
+    namespace :pre_commit do
+      desc 'Check branch name style'
+      task :check_branch_name do
+        expected_branch_reg = /^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/
+        branch_name = Githook::Util.branch_name
+        if branch_name.include?('/')
+          valid = expected_branch_reg.match(branch_name)
+        else
+          valid = %w(develop staging master).include?(branch_name)
+        end
+        unless valid
+          puts "Branch name #{branch_name} doesn't match the expected foramt."
+          exit 1
+        end
+      end
+    end
+
+Finally, don't forget to enable this task in `.githook/config.rb`:
+
+    # .githook/config.rb
+    set :pre_commit, fetch(:pre_commit, []).push(
+      'pre_commit:check_branch_name'
+    )
+
+Demo:
+
+![](./art/check_branch_name.gif)
 
 ## License
 

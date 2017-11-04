@@ -5,6 +5,8 @@ set :pre_commit, fetch(:pre_commit, []).push(
 
   # uncomment following lines if it is a java project built by gradle
   # 'pre_commit:checkstyle'
+
+  # 'pre_commit:check_branch_name'
 )
 set :prepare_commit_msg, fetch(:prepare_commit_msg, []).push(
   # comment following lines if you want to skip it
