@@ -9,10 +9,12 @@ namespace :prepare_commit_msg do
     # but we can "exit 1" in advance
     # exit 0 unless Githook::Util.commit_msg_empty?(commit_msg_file)
 
-    if Githook::Util.commit_msg_empty?(commit_msg_file)
+    commit_msg = Githook::Util.get_commit_msg(commit_msg_file)
+    if Githook::Util.commit_msg_empty?(commit_msg)
       branch_name = Githook::Util.branch_name
       pre_msg = Githook::Util.gen_pre_msg(branch_name)
-      puts "pre-msg: #{pre_msg}"
+      puts "pre-msg:"
+      puts pre_msg
       Githook::Util.prefill_msg(commit_msg_file, pre_msg)
     end
   end

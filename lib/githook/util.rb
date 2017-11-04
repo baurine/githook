@@ -64,23 +64,44 @@ module Githook
       `git symbolic-ref --short HEAD`
     end
 
-    # check whether origin commit msg is empty
-    def self.commit_msg_empty?(commit_msg_file)
+    def self.get_commit_msg(commit_msg_file)
+      commit_msg = []
+      # trim begining empty lines
       File.open(commit_msg_file, 'r') do |f|
         f.readlines.each do |line|
-          strip_line = line.strip
-          return false if (!strip_line.empty? && !strip_line.start_with?('#'))
+          next if line[0] == '#'
+          next if commit_msg.empty? && line.strip.empty?
+          commit_msg << line
         end
+      end
+      # trim redundant tail empty lines
+      unless commit_msg.empty?
+        last_not_empty_line = 0
+        commit_msg.each_with_index do |line, index|
+          last_not_empty_line = index unless line.strip.empty?
+        end
+        commit_msg = commit_msg[0..last_not_empty_line]
+      end
+      # remove every line right blank space, include "\n"
+      commit_msg.map(&:rstrip)
+    end
+
+    # check whether origin commit msg is empty
+    def self.commit_msg_empty?(commit_msg_arr)
+      commit_msg_arr.each do |line|
+        return false unless line.strip.empty?
       end
       true
     end
 
-    BRANCH_NAME_REG = /^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/
+    # default valid branch name: feature/24_add_enable_task
+    # will generate commit message: FEATURE #24 - Add enable task
+    DEF_BRANCH_NAME_REG = /^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/
     # generate pre msg according branch name
     # why do I pass branch_name as a parameter, not implement it inside the gen_pre_msg,
     # because this is easy to test, it a kind of inject dependency thinking.
     def self.gen_pre_msg(branch_name)
-      match_group = BRANCH_NAME_REG.match(branch_name)
+      match_group = DEF_BRANCH_NAME_REG.match(branch_name)
       if match_group
         issue_type = match_group[1].upcase
         issue_num = match_group[2]
@@ -106,25 +127,36 @@ module Githook
       end
     end
 
-    def self.get_commit_msg(commit_msg_file)
-      commit_msg = ''
-      File.open(commit_msg_file, 'r') do |f|
-        f.readlines.each do |line|
-          strip_line = line.strip
-          if !strip_line.empty? && !strip_line.start_with?('#')
-            commit_msg = line
-            break
-          end
+    DEF_MSG_SUMMARY_REG = /^(FEATURE|BUG|MISC|REFACTOR|WIP)(\s#\d+)* - ([A-Z].*)[^.]$/
+    DEF_MSG_SUMMARY_FORMAT = "FEAUTER|BUG|MISC|REFACTOR|WIP #issue_num - Summary"
+    DEF_MSG_BODY_REG = /^- ([a-z].*)[^.]$/
+    DEF_MSG_BODY_FORMAT = "- detail"
+    def self.check_msg_format?(commit_msg_arr)
+      summary = commit_msg_arr[0] || ''
+      second_line = commit_msg_arr[1] || ''
+      body = commit_msg_arr[2..-1] || []
+
+      valid = summary.start_with?('Merge branch') || DEF_MSG_SUMMARY_REG.match(summary)
+      unless valid
+        puts "Commit message summary \"#{summary}\" format isn't correct."
+        puts "Expected format: \"#{DEF_MSG_SUMMARY_FORMAT}\""
+        return false
+      end
+
+      valid = second_line.strip.empty?
+      unless valid
+        puts "Commit message the first line after summary should be blank."
+        return false
+      end
+
+      body.each do |line|
+        unless DEF_MSG_BODY_REG.match(line)
+          puts "Commit message body line \"#{line}\" format isn't correct."
+          puts "Expected format: \"#{DEF_MSG_BODY_FORMAT}\""
+          return false
         end
       end
-      commit_msg
-    end
-
-    MSG_FORMAT_REG = /^(FEATURE|BUG|MISC|REFACTOR|WIP)(\s#\d+)* - ([A-Z].*)/
-    MSG_FORMAT = "FEAUTER|BUG|MISC|REFACTOR|WIP #issue_num - Content"
-    # check commit msg style
-    def self.expected_msg_format?(commit_msg)
-      commit_msg.start_with?('Merge branch') || MSG_FORMAT_REG.match(commit_msg)
+      true
     end
   end
 end
