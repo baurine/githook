@@ -56,6 +56,14 @@ module Githook
 
     #######################################################
 
+    def self.commit_msg_file
+      '.git/COMMIT_EDITMSG'
+    end
+
+    def self.branch_name
+      `git symbolic-ref --short HEAD`
+    end
+
     # check whether origin commit msg is empty
     def self.commit_msg_empty?(commit_msg_file)
       File.open(commit_msg_file, 'r') do |f|
@@ -69,6 +77,8 @@ module Githook
 
     BRANCH_NAME_REG = /^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/
     # generate pre msg according branch name
+    # why do I pass branch_name as a parameter, not implement it inside the gen_pre_msg,
+    # because this is easy to test, it a kind of inject dependency thinking.
     def self.gen_pre_msg(branch_name)
       match_group = BRANCH_NAME_REG.match(branch_name)
       if match_group

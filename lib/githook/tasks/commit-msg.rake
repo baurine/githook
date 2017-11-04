@@ -3,7 +3,7 @@ namespace :commit_msg do
   task :check_msg do |t|
     Githook::Util.log(t.name)
 
-    commit_msg_file = '.git/COMMIT_EDITMSG'
+    commit_msg_file = Githook::Util.commit_msg_file
     commit_msg = Githook::Util.get_commit_msg(commit_msg_file)
     puts "commit-msg: #{commit_msg}"
     # can't use return in block
