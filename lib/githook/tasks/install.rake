@@ -1,4 +1,4 @@
-desc 'Init githook, prepare template files'
+desc 'Init githook, create .githook folder, prepare template files'
 task :install do
   # step 1, check whether Dir.pwd is in git repo root folder
   git_path = ".git"

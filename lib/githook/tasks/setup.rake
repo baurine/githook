@@ -18,7 +18,7 @@ end
 
 #################################################################
 
-desc 'Setup hooks'
+desc 'Setup hooks, copy hooks from .githook/hooks to .git/hooks'
 task :setup => [:check_githook_folder, :check_git_folder] do
   # setup 1, check whether has '.githook/hooks' and '.git' folder
   # => [:check_githook_folder, :check_git_folder]
@@ -159,12 +159,12 @@ TASKS_NAME = %w(
 )
 desc 'Help'
 task :help do
-  puts
   puts "Usage: githook task_name"
   puts
   puts "task_name:"
+  left_len = TASKS_NAME.map(&:length).max + 2
   TASKS_NAME.each do |task_name|
     task = Rake::Task[task_name]
-    puts "  #{task_name.ljust(8)} -- #{task.comment}"
+    puts "  #{task_name.ljust(left_len)} -- #{task.comment}"
   end
 end
