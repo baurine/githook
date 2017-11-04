@@ -1,4 +1,4 @@
-desc 'Check where .githook folder exists'
+desc 'Check whether .githook/hooks folder exists'
 task :check_githook_folder do
   hooks_path = '.githook/hooks'
   unless Dir.exists?(hooks_path)
@@ -7,7 +7,7 @@ task :check_githook_folder do
   end
 end
 
-desc 'Check where .git folder exists'
+desc 'Check whether .git/hooks folder exists'
 task :check_git_folder do
   git_path = '.git/hooks'
   unless Dir.exists?(git_path)
@@ -44,18 +44,18 @@ task :backup => :check_git_folder do
     has_backup = true
   end
 
-  puts "you can run 'rake clear_backup' to delete these backup" if has_backup
+  puts "You can run 'githook clearup' to delete these backup." if has_backup
 end
 
 desc 'Clear backup hooks in .git/hooks'
-task :clear_backup => :check_git_folder do
+task :clearup => :check_git_folder do
   backup = Dir.glob('.git/hooks/*.bak')
   Githook::Util.interactive_delete_files(backup, 'backup hooks')
 end
 
 # later I think we don't need to clear hooks, use disable/enable replace them
 # desc 'clear all hooks (include backup) in .git/hooks'
-# task :clear => :clear_backup do |t|
+# task :clear => :clearup do |t|
 #   Githook::Util.log(t.name)
 
 #   hooks = Dir.glob('.git/hooks/*')
@@ -150,7 +150,7 @@ TASKS_NAME = %w(
   install
   setup
   backup
-  clear_backup
+  clearup
   disable
   enable
   list
@@ -165,6 +165,6 @@ task :help do
   puts "task_name:"
   TASKS_NAME.each do |task_name|
     task = Rake::Task[task_name]
-    puts "  #{task_name.ljust(13)} -- #{task.comment}"
+    puts "  #{task_name.ljust(8)} -- #{task.comment}"
   end
 end
