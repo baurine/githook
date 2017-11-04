@@ -5,10 +5,16 @@ namespace :pre_commit do
     exit 1 unless system("bundle exec rubocop")
   end
 
-  desc 'test by rspec'
+  desc 'test ruby code by rspec'
   task :rspec do |t|
     Githook::Util.log(t.name)
     exit 1 unless system("bundle exec rspec")
+  end
+
+  desc 'check java code style by checkstyle'
+  task :checkstyle do |t|
+    Githook::Util.log(t.name)
+    exit 1 unless system("./gradlew checkstyle")
   end
 end
 
