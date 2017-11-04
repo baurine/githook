@@ -1,6 +1,6 @@
 module Githook
   class Util
-    def self.log(task_name)
+    def self.log_task(task_name)
       puts "[#{Time.now.strftime('%H:%m:%S')}] #{task_name.gsub('_', ' ')}"
     end
 

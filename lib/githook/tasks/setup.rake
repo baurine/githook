@@ -56,7 +56,7 @@ end
 # later I think we don't need to clear hooks, use disable/enable replace them
 # desc 'clear all hooks (include backup) in .git/hooks'
 # task :clear => :clearup do |t|
-#   Githook::Util.log(t.name)
+#   Githook::Util.log_task(t.name)
 
 #   hooks = Dir.glob('.git/hooks/*')
 #              .reject { |path| path.split('/').last.include?('.') }

@@ -1,7 +1,7 @@
 namespace :prepare_commit_msg do
   desc 'prepare commit msg'
   task :prepare do |t|
-    Githook::Util.log(t.name)
+    Githook::Util.log_task(t.name)
 
     commit_msg_file = Githook::Util.commit_msg_file
     # can't use return in block
@@ -22,6 +22,6 @@ end
 
 desc 'run all prepare-commit-msg hook tasks'
 task :prepare_commit_msg do |t|
-  Githook::Util.log(t.name)
+  Githook::Util.log_task(t.name)
   Githook::Util.run_tasks(t.name.to_sym)
 end

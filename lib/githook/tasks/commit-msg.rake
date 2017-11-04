@@ -1,7 +1,7 @@
 namespace :commit_msg do
   desc 'check commit msg style'
   task :check_msg do |t|
-    Githook::Util.log(t.name)
+    Githook::Util.log_task(t.name)
 
     commit_msg_file = Githook::Util.commit_msg_file
     commit_msg = Githook::Util.get_commit_msg(commit_msg_file)
@@ -17,6 +17,6 @@ end
 
 desc 'run all commit-msg hook tasks'
 task :commit_msg do |t|
-  Githook::Util.log(t.name)
+  Githook::Util.log_task(t.name)
   Githook::Util.run_tasks(t.name.to_sym)
 end
