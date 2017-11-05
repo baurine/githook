@@ -12,7 +12,7 @@
 #       valid = %w(develop staging master).include?(branch_name)
 #     end
 #     unless valid
-#       puts "Branch name #{branch_name} doesn't match the expected foramt."
+#       puts "Branch name \"#{branch_name}\" doesn't match the expected foramt."
 #       exit 1
 #     end
 #   end

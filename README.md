@@ -71,7 +71,9 @@ Demos:
 
 ## Principle
 
-Git will call some hooks when you commit, merge, rebase code, etc. The hooks place in `.git/hooks` folder, there are many default sample hooks, you need remove the `.sample` appendix to make it works if you want to execute the hook. The 3 hooks are most useful for us: pre-commit, prepare-commit-msg, commit-msg.
+Git will call some hooks when you commit, merge, rebase code, etc. The hooks place in `.git/hooks` folder, there are many default sample hooks, you need remove the `.sample` suffix to make it works if you want to execute the hook. The 3 hooks are most useful for us: `pre-commit`, `prepare-commit-msg`, `commit-msg`.
+
+`pre-commit` hook will be executed at the most begining when commit code, `prepare-commit-msg` hook will be executed after `pre-commit` hook, before you start to input some commit message, `commit-msg` hook will be executed after you save the commit message.
 
 [See more hooks introduction in git official website - Customizing Git - Git Hooks](https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks).
 
@@ -117,7 +119,7 @@ Where do we define the `:pre_commit` value? It is defined by user in `.githook/c
       # 'pre_commit:rubocop',
       # 'pre_commit:rspec',
 
-      # uncomment following lines if it is a java project built by gradle
+      # uncomment following lines if it is an android or java project built by gradle
       # 'pre_commit:checkstyle'
     )
     set :prepare_commit_msg, fetch(:prepare_commit_msg, []).push(
@@ -129,9 +131,9 @@ Where do we define the `:pre_commit` value? It is defined by user in `.githook/c
       'commit_msg:check_msg'
     )
 
-We use `set` method to set the value. It seems the `:pre_commit` value is an empty array by default, all items are commented, so `githook pre_commit` in `pre-commit` hook will do nothing, but if your project is a ruby or rails project, there are 2 default tasks are prepared for `:pre_commit`, they are `pre_commit:rubocop` and `pre_commit:rspec`, if you uncomment the above 2 lines code, then `pre_commit:rubocp` and `pre_commit:rspec` will be executed when you commit code, of course, you can define your customized task and add to some hook (later I will introduce how to add a customized task).
+We use `set` method to set the value. It seems the `:pre_commit` value is an empty array by default, all items are commented, so `githook pre_commit` in `pre-commit` hook will do nothing, but if your project is a ruby or rails project, there are 2 default tasks are prepared for `:pre_commit`, they are `pre_commit:rubocop` and `pre_commit:rspec` (also has a default task `pre_commit:checkstyle` prepared for android or java project), if you uncomment the above 2 lines code, then `pre_commit:rubocp` and `pre_commit:rspec` will be executed when you commit code, of course, you can define your customized tasks and add to hooks (later I will introduce how to add a customized task).
 
-How the default tasks `pre_commit:rubocop` and `pre_commit:rspec` looks like, they are defined in `tasks/pre-commit.rake`:
+How do the default tasks `pre_commit:rubocop` and `pre_commit:rspec` look like, they are defined in `tasks/pre-commit.rake`:
 
     namespace :pre_commit do
       desc 'check ruby code style by rubocop'
@@ -153,7 +155,7 @@ How the default tasks `pre_commit:rubocop` and `pre_commit:rspec` looks like, th
       end
     end
 
-The `pre_commit:rubocop` just simply runs `bundle exec rubocop` command to check ruby code style, while `pre_commit:rspec` runs `bundle exec rspec` to test ruby code.
+The `pre_commit:rubocop` just simply runs `bundle exec rubocop` command to check ruby code style, while `pre_commit:rspec` runs `bundle exec rspec` to test ruby code. (`pre_commit:checkstyle` runs the `./gradlew checkstyle` command.)
 
 At last, let's see what do `prepare_commit_msg:prepare` and `commit_msg:check_msg` tasks do?
 
@@ -176,7 +178,7 @@ The `prepare_commit_msg:prepare` is defined in `tasks/prepare-commit-msg.rake`, 
       end
     end
 
-The `commit_msg:check_msg` is defined in `tasks/commit-msg.rake`, it is executed in `commit-msg` hook after you save the commit message. It will check your commit message style, if it doesn't match the expected format, then this commit will be aborted. In default, our expected commit message summary format is "FEAUTER|BUG|MISC|REFACTOR|WIP #issue_num - Summary", if you want to another format, you need to define yourself task to replace the default behavior.
+The `commit_msg:check_msg` is defined in `tasks/commit-msg.rake`, it is executed in `commit-msg` hook after you save the commit message. It will check your commit message style, if it doesn't match the expected format, then this commit will be aborted. In default, our expected commit message summary format is "FEAUTER|BUG|MISC|REFACTOR #issue_num - Summary", if you prefer to use other format, you need to define yourself task to replace the default behavior.
 
     namespace :commit_msg do
       desc 'check commit msg style'
@@ -195,7 +197,7 @@ The `commit_msg:check_msg` is defined in `tasks/commit-msg.rake`, it is executed
 
 The default `pre_commit:rubocp`, `pre_commit:rspec` tasks will help you check ruby code style and test ruby code before commit, the `prepare_commit_msg:prepare` task will help auto generate commit message according branch name when commit code, the `commit_msg:check_msg` task will help check commit message style after save the commit message.
 
-If you don't like these default behaviors, for example you have your own commit message style, or you want to add more checks, for example you want to be more strict in the branch name, you can't name a branch arbitrarily, it must follow some rules, it should be any of `develop/staging/master`, `/^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/`, let's try to implement this custom task.
+If you don't like these default behaviors, for example you have your own commit message style, or you want to add more checks, for example you want to be more strict in the branch name, you can't name a branch arbitrarily, it must follow some rules, it should be one of `develop/staging/master`, `/^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/`, let's try to implement this custom task.
 
 We can define it in any rake file in `.githook/tasks` folder, there is already an empty `task.rake` file, so let's just define in it. It should work in `pre-commit` hook, so let's define it in `:pre_commit` namespace.
 
@@ -227,6 +229,11 @@ Finally, don't forget to enable this task in `.githook/config.rb`:
 Demo:
 
 ![](./art/check_branch_name.gif)
+
+## References
+
+1. [Git Hooks Sample](https://github.com/baurine/git-hooks-sample)
+1. [Step-by-Step Guide to Building Your First Ruby Gem](https://quickleft.com/blog/engineering-lunch-series-step-by-step-guide-to-building-your-first-ruby-gem/)
 
 ## License
 

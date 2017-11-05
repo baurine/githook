@@ -127,8 +127,8 @@ module Githook
       end
     end
 
-    DEF_MSG_SUMMARY_REG = /^(FEATURE|BUG|MISC|REFACTOR|WIP)(\s#\d+)* - ([A-Z].*)[^.]$/
-    DEF_MSG_SUMMARY_FORMAT = "FEAUTER|BUG|MISC|REFACTOR|WIP #issue_num - Summary"
+    DEF_MSG_SUMMARY_REG = /^(FEATURE|BUG|MISC|REFACTOR)(\s#\d+)* - ([A-Z].*)[^.]$/
+    DEF_MSG_SUMMARY_FORMAT = "FEAUTER|BUG|MISC|REFACTOR #issue_num - Summary"
     DEF_MSG_BODY_REG = /^- ([a-z].*)[^.]$/
     DEF_MSG_BODY_FORMAT = "- detail"
     def self.check_msg_format?(commit_msg_arr)
