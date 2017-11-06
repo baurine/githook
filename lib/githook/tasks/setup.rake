@@ -54,7 +54,7 @@ task :clearup => :check_git_folder do
 end
 
 # later I think we don't need to clear hooks, use disable/enable replace them
-# desc 'clear all hooks (include backup) in .git/hooks'
+# desc 'Clear all hooks (include backup) in .git/hooks'
 # task :clear => :clearup do |t|
 #   Githook::Util.log_task(t.name)
 
