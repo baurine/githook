@@ -2,11 +2,11 @@
 # or put them in a new .rake file
 
 # namespace :pre_commit do
-#   desc 'Check branch name style'
+#   desc "Check branch name style"
 #   task :check_branch_name do
 #     expected_branch_reg = /^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/
 #     branch_name = Githook::Util.branch_name
-#     if branch_name.include?('/')
+#     if branch_name.include?("/")
 #       valid = expected_branch_reg.match(branch_name)
 #     else
 #       valid = %w(develop staging master).include?(branch_name)

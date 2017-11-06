@@ -1,4 +1,4 @@
-desc 'Init githook, create .githook folder, prepare template files'
+desc "Init githook, create .githook folder, prepare template files"
 task :install do
   # step 1, check whether Dir.pwd is in git repo root folder
   git_path = ".git"
@@ -7,7 +7,7 @@ task :install do
     exit 1
   end
 
-  # step 2, check whether '.githook' folder already exists
+  # step 2, check whether ".githook" folder already exists
   githook_path = ".githook"
   if Dir.exists?(githook_path)
     print ".githook already exists, do you want to override it? [y/(n)]: "

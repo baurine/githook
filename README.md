@@ -91,7 +91,7 @@ We will execute `githook pre_commit` in `pre-commit`, if it fails, it will abort
 
 What does `githook pre_commit` do? don't forget the githook base on Rake, so the `pre_commit` is a task defined in `tasks/pre-commit.rake`:
 
-    desc 'Run all pre-commit hook tasks'
+    desc "Run all pre-commit hook tasks"
     task :pre_commit do |t|
       Githook::Util.log_task(t.name)
       Githook::Util.run_tasks(t.name.to_sym)
@@ -116,19 +116,19 @@ Where do we define the `:pre_commit` value? It is defined by user in `.githook/c
 
     set :pre_commit, fetch(:pre_commit, []).push(
       # uncomment following lines if it is a ruby project
-      # 'pre_commit:rubocop',
-      # 'pre_commit:rspec',
+      # "pre_commit:rubocop",
+      # "pre_commit:rspec",
 
       # uncomment following lines if it is an android or java project built by gradle
-      # 'pre_commit:checkstyle'
+      # "pre_commit:checkstyle"
     )
     set :prepare_commit_msg, fetch(:prepare_commit_msg, []).push(
       # comment following lines if you want to skip it
-      'prepare_commit_msg:prepare'
+      "prepare_commit_msg:prepare"
     )
     set :commit_msg, fetch(:commit_msg, []).push(
       # comment following lines if you want to skip it
-      'commit_msg:check_msg'
+      "commit_msg:check_msg"
     )
 
 We use `set` method to set the value. It seems the `:pre_commit` value is an empty array by default, all items are commented, so `githook pre_commit` in `pre-commit` hook will do nothing, but if your project is a ruby or rails project, there are 2 default tasks are prepared for `:pre_commit`, they are `pre_commit:rubocop` and `pre_commit:rspec` (also has a default task `pre_commit:checkstyle` prepared for android or java project), if you uncomment the above 2 lines code, then `pre_commit:rubocp` and `pre_commit:rspec` will be executed when you commit code, of course, you can define your customized tasks and add to hooks (later I will introduce how to add a customized task).
@@ -136,19 +136,19 @@ We use `set` method to set the value. It seems the `:pre_commit` value is an emp
 How do the default tasks `pre_commit:rubocop` and `pre_commit:rspec` look like, they are defined in `tasks/pre-commit.rake`:
 
     namespace :pre_commit do
-      desc 'Check ruby code style by rubocop'
+      desc "Check ruby code style by rubocop"
       task :rubocop do |t|
         Githook::Util.log_task(t.name)
         exit 1 unless system("bundle exec rubocop")
       end
 
-      desc 'Test ruby code by rspec'
+      desc "Test ruby code by rspec"
       task :rspec do |t|
         Githook::Util.log_task(t.name)
         exit 1 unless system("bundle exec rspec")
       end
 
-      desc 'Check java code style by checkstyle'
+      desc "Check java code style by checkstyle"
       task :checkstyle do |t|
         Githook::Util.log_task(t.name)
         exit 1 unless system("./gradlew checkstyle")
@@ -162,7 +162,7 @@ At last, let's see what do `prepare_commit_msg:prepare` and `commit_msg:check_ms
 The `prepare_commit_msg:prepare` is defined in `tasks/prepare-commit-msg.rake`, it is executed in `prepare-commit-msg` hook. It will check whether the commit message is empty, if it is, it will help generate the commit message according the branch name, for example, if the branch name is `feature/24_add_help_task`, then the auto generated commit message is "FEATURE #24 - Add help task".
 
     namespace :prepare_commit_msg do
-      desc 'Prepare commit msg'
+      desc "Prepare commit msg"
       task :prepare do |t|
         Githook::Util.log_task(t.name)
 
@@ -181,7 +181,7 @@ The `prepare_commit_msg:prepare` is defined in `tasks/prepare-commit-msg.rake`, 
 The `commit_msg:check_msg` is defined in `tasks/commit-msg.rake`, it is executed in `commit-msg` hook after you save the commit message. It will check your commit message style, if it doesn't match the expected format, then this commit will be aborted. In default, our expected commit message summary format is "FEAUTER|BUG|MISC|REFACTOR #issue_num - Summary", if you prefer to use other format, you need to define yourself task to replace the default behavior.
 
     namespace :commit_msg do
-      desc 'Check commit msg style'
+      desc "Check commit msg style"
       task :check_msg do |t|
         Githook::Util.log_task(t.name)
 
@@ -203,11 +203,11 @@ We can define it in any rake file in `.githook/tasks` folder, there is already a
 
     # .githook/tasks/task.rake
     namespace :pre_commit do
-      desc 'Check branch name style'
+      desc "Check branch name style"
       task :check_branch_name do
         expected_branch_reg = /^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/
         branch_name = Githook::Util.branch_name
-        if branch_name.include?('/')
+        if branch_name.include?("/")
           valid = expected_branch_reg.match(branch_name)
         else
           valid = %w(develop staging master).include?(branch_name)
@@ -223,7 +223,7 @@ Finally, don't forget to enable this task in `.githook/config.rb`:
 
     # .githook/config.rb
     set :pre_commit, fetch(:pre_commit, []).push(
-      'pre_commit:check_branch_name'
+      "pre_commit:check_branch_name"
     )
 
 Demo:

@@ -38,26 +38,26 @@ module Githook
     #######################################################
 
     # def self.enabled_hooks
-    #   Dir.glob('.git/hooks/*')
-    #      .map { |path| path.split('/').last }
-    #      .reject { |name| name.include?('.') }
-    #      .map { |name| name.gsub('-', '_') }
+    #   Dir.glob(".git/hooks/*")
+    #      .map { |path| path.split("/").last }
+    #      .reject { |name| name.include?(".") }
+    #      .map { |name| name.gsub("-", "_") }
     # end
 
     # include enabled_hooks and disabled_hooks
     def self.all_hooks
-      Dir.glob('.git/hooks/*')
-         .map { |path| path.split('/').last }
-         .select { |name| !name.include?('.') || name.include?('.disable') }
-         .map { |name| name.gsub('.disable', '') }
+      Dir.glob(".git/hooks/*")
+         .map { |path| path.split("/").last }
+         .select { |name| !name.include?(".") || name.include?(".disable") }
+         .map { |name| name.gsub(".disable", "") }
          .uniq
-         .map { |name| name.gsub('-', '_') }
+         .map { |name| name.gsub("-", "_") }
     end
 
     #######################################################
 
     def self.commit_msg_file
-      '.git/COMMIT_EDITMSG'
+      ".git/COMMIT_EDITMSG"
     end
 
     def self.branch_name
@@ -67,9 +67,9 @@ module Githook
     def self.get_commit_msg(commit_msg_file)
       commit_msg = []
       # trim begining empty lines
-      File.open(commit_msg_file, 'r') do |f|
+      File.open(commit_msg_file, "r") do |f|
         f.readlines.each do |line|
-          next if line[0] == '#'
+          next if line[0] == "#"
           next if commit_msg.empty? && line.strip.empty?
           commit_msg << line
         end
@@ -107,19 +107,19 @@ module Githook
         issue_num = match_group[2]
         issue_content = match_group[3]
 
-        issue_type = 'BUG' if issue_type == 'HOTFIX'
+        issue_type = "BUG" if issue_type == "HOTFIX"
         issue_num = " \##{issue_num}" unless issue_num.empty?
-        issue_content = issue_content.tr('_', ' ').strip.capitalize
+        issue_content = issue_content.tr("_", " ").strip.capitalize
 
         "#{issue_type}#{issue_num} - #{issue_content}"
       else
-        'MISC - '
+        "MISC - "
       end
     end
 
     # write the pre msg at the begining of commit_msg_file
     def self.prefill_msg(commit_msg_file, pre_msg)
-      File.open(commit_msg_file, 'r+') do |f|
+      File.open(commit_msg_file, "r+") do |f|
         ori_content = f.read
         f.seek(0, IO::SEEK_SET)
         f.puts pre_msg
@@ -132,11 +132,11 @@ module Githook
     DEF_MSG_BODY_REG = /^- ([a-z].*)[^.]$/
     DEF_MSG_BODY_FORMAT = "- detail"
     def self.check_msg_format?(commit_msg_arr)
-      summary = commit_msg_arr[0] || ''
-      second_line = commit_msg_arr[1] || ''
+      summary = commit_msg_arr[0] || ""
+      second_line = commit_msg_arr[1] || ""
       body = commit_msg_arr[2..-1] || []
 
-      valid = summary.start_with?('Merge branch') || DEF_MSG_SUMMARY_REG.match(summary)
+      valid = summary.start_with?("Merge branch") || DEF_MSG_SUMMARY_REG.match(summary)
       unless valid
         puts "Commit message summary \"#{summary}\" format isn't correct."
         puts "Expected format: \"#{DEF_MSG_SUMMARY_FORMAT}\""
