@@ -23,14 +23,14 @@ module Githook
       else
         puts "There are following #{type}:"
         puts path_arr
-        print "Are you sure want to delete all of them [(y)/n]: "
+        print "Are you sure want to delete all of them [y/(n)]: "
         # https://stackoverflow.com/a/40643667/2998877
         choice = STDIN.gets
-        if ["Y", "y", "\n"].include?(choice[0])
-          path_arr.each do |path|
-            FileUtils.rm(path)
-            puts "Delete #{path}"
-          end
+        return if ["N", "n", "\n"].include?(choice[0])
+
+        path_arr.each do |path|
+          FileUtils.rm(path)
+          puts "Delete #{path}"
         end
       end
     end
