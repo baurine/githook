@@ -199,9 +199,9 @@ The default `pre_commit:rubocp`, `pre_commit:rspec` tasks will help you check ru
 
 If you don't like these default behaviors, for example you have your own commit message style, or you want to add more checks, for example you want to be more strict in the branch name, you can't name a branch arbitrarily, it must follow some rules, it should be one of `develop/staging/master`, `/^(feature|bug|hotfix|misc|refactor)\/(\d*)?(\w*)/`, let's try to implement this custom task.
 
-We can define it in any rake file in `.githook/tasks` folder, there is already an empty `task.rake` file, so let's just define in it. It should work in `pre-commit` hook, so let's define it in `:pre_commit` namespace.
+We can define it in any rake file in `.githook/tasks` folder, there is already an empty `tasks.rake` file, so let's just define in it. It should work in `pre-commit` hook, so let's define it in `:pre_commit` namespace.
 
-    # .githook/tasks/task.rake
+    # .githook/tasks/tasks.rake
     namespace :pre_commit do
       desc "Check branch name style"
       task :check_branch_name do
