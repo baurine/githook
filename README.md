@@ -32,6 +32,8 @@ Or install it yourself as:
 
     $ gem install git-hook
 
+**Notice!** The gem name isn't **githook**, it is another gem written by some guy.
+
 ## Usage
 
 Help:
@@ -234,6 +236,10 @@ Demo:
 
 1. [Git Hooks Sample](https://github.com/baurine/git-hooks-sample)
 1. [Step-by-Step Guide to Building Your First Ruby Gem](https://quickleft.com/blog/engineering-lunch-series-step-by-step-guide-to-building-your-first-ruby-gem/)
+
+## Note
+
+1. [How to Build a Gem](note/how-to-build-a-gem.md)
 
 ## License
 
