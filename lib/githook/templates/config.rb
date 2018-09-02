@@ -11,6 +11,7 @@ set :pre_commit, fetch(:pre_commit, []).push(
 set :prepare_commit_msg, fetch(:prepare_commit_msg, []).push(
   # comment following lines if you want to skip it
   "prepare_commit_msg:prepare_for_ekohe_branch"
+  # "prepare_commit_msg:prepare_for_gitlab_branch"
 )
 set :commit_msg, fetch(:commit_msg, []).push(
   # comment following lines if you want to skip it
