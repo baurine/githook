@@ -63,7 +63,7 @@ gem 的实现代码在 lib 目录中，lib 目录中有一个与项目同名的�
 
 ### 发布
 
-一切就绪，我们准备发布。在此之前，我们要先到 Gem 的发布平台 [RubyGem](https://rubygems.org/) 申请账号，获得 API Key，根据网站上的指示，在本地生成一个 `~/.gem/credential` 文件，文件里存放你的 API Key。
+一切就绪，我们准备发布。在此之前，我们要先到 Gem 的发布平台 [RubyGem](https://rubygems.org/) 申请账号，获得 API Key，根据[网站上的指示](https://rubygems.org/profile/edit)，在本地生成一个 `~/.gem/credential` 文件，文件里存放你的 API Key。
 
 然后，执行 `rake release` 命令就能完成发布。`rake release` 会完成一系列工作，比如为你的项目打一个名为当前版本号的 tag，并推送远程，本地构建生成 .gem 文件，上传 .gem 文件等。
 
