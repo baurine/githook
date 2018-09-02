@@ -14,9 +14,3 @@ namespace :commit_msg do
     exit 1 unless Githook::Util.check_msg_format?(commit_msg)
   end
 end
-
-desc "Run all commit-msg hook tasks"
-task :commit_msg do |t|
-  Githook::Util.log_task(t.name)
-  Githook::Util.run_tasks(t.name.to_sym)
-end

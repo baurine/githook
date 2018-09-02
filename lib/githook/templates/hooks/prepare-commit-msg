@@ -36,4 +36,4 @@ esac
 # grep -qs "^$SOB" "$1" || echo "$SOB" >> "$1"
 
 # custom prepare-commit-msg hooks
-githook prepare_commit_msg
+HOOK=prepare_commit_msg githook run

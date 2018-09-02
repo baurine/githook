@@ -19,9 +19,3 @@ namespace :prepare_commit_msg do
     end
   end
 end
-
-desc "Run all prepare-commit-msg hook tasks"
-task :prepare_commit_msg do |t|
-  Githook::Util.log_task(t.name)
-  Githook::Util.run_tasks(t.name.to_sym)
-end
