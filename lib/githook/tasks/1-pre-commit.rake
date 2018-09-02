@@ -17,9 +17,3 @@ namespace :pre_commit do
     exit 1 unless system("./gradlew checkstyle")
   end
 end
-
-desc "Run all pre-commit hook tasks"
-task :pre_commit do |t|
-  Githook::Util.log_task(t.name)
-  Githook::Util.run_tasks(t.name.to_sym)
-end

@@ -24,4 +24,4 @@ test "" = "$(grep '^Signed-off-by: ' "$1" |
 }
 
 # custom commit-msg hooks
-githook commit_msg
+HOOK=commit_msg githook run

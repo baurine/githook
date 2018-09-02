@@ -22,7 +22,7 @@ allownonascii=$(git config --bool hooks.allownonascii)
 exec 1>&2
 
 # custom pre-commit hooks
-githook pre_commit
+HOOK=pre_commit githook run
 if [ $? -ne 0 ]; then
   exit 1
 fi

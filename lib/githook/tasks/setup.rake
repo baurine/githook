@@ -44,24 +44,14 @@ task :backup => :check_git_folder do
     has_backup = true
   end
 
-  puts "You can run 'githook clearup' to delete these backup." if has_backup
+  puts "You can run 'githook clean' to delete these backup." if has_backup
 end
 
 desc "Clear backup hooks in .git/hooks"
-task :clearup => :check_git_folder do
+task :clean => :check_git_folder do
   backup = Dir.glob(".git/hooks/*.bak")
   Githook::Util.interactive_delete_files(backup, "backup hooks")
 end
-
-# later I think we don't need to clear hooks, use disable/enable replace them
-# desc "Clear all hooks (include backup) in .git/hooks"
-# task :clear => :clearup do |t|
-#   Githook::Util.log_task(t.name)
-
-#   hooks = Dir.glob(".git/hooks/*")
-#              .reject { |path| path.split("/").last.include?(".") }
-#   Githook::Util.interactive_delete_files(hooks, "hooks")
-# end
 
 # all hooks
 # https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
@@ -150,7 +140,7 @@ TASKS_NAME = %w(
   install
   setup
   backup
-  clearup
+  clean
   disable
   enable
   list
