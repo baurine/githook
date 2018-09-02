@@ -45,7 +45,7 @@ Help:
       install  -- Init githook, create .githook folder, prepare template files
       setup    -- Setup hooks, copy hooks from .githook/hooks to .git/hooks
       backup   -- Backup old hooks in .git/hooks
-      clearup  -- Clear backup hooks in .git/hooks
+      clean  -- Clear backup hooks in .git/hooks
       disable  -- Disable hooks: [HOOKS=pre_commit,commit_msg] githook disable
       enable   -- Enable hooks: [HOOKS=pre_commit,commit_msg] githook enable
       list     -- List all hooks
