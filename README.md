@@ -45,7 +45,7 @@ Help:
       install  -- Init githook, create .githook folder, prepare template files
       setup    -- Setup hooks, copy hooks from .githook/hooks to .git/hooks
       backup   -- Backup old hooks in .git/hooks
-      clean  -- Clear backup hooks in .git/hooks
+      clean    -- Clear backup hooks in .git/hooks
       disable  -- Disable hooks: [HOOKS=pre_commit,commit_msg] githook disable
       enable   -- Enable hooks: [HOOKS=pre_commit,commit_msg] githook enable
       list     -- List all hooks
@@ -57,7 +57,11 @@ Getting started:
     $ githook install
     $ githook setup
 
-Demos:
+Modify `.githook/config.rb` according to your requirement:
+
+    $ vim .githook/config.rb
+
+## Demo
 
 1. install, setup hooks
 
@@ -240,6 +244,27 @@ Demo:
 ## Note
 
 1. [How to Build a Gem](note/how-to-build-a-gem.md)
+
+## Releases
+
+### 1.0.8
+
+1. Rename `githook clearup` command to `githook clean`
+
+1. Unify `githook pre_commit`, `githook prepare_commit_msg`, `githook commit_msg` commands to `githook run` but with different ENV value
+
+        githook pre_commit          -->  HOOK=pre_commit githook run
+        githook prepare_commit_msg  -->  HOOK=prepare_commit_msg githook run
+        githook commit_msg          -->  HOOK=commit_msg githook run
+
+1. Support gitlab type branch name, for example "100-support-gitlab-branch", it will generate "FEATURE #100 - Support gitlab branch" commit message by `prepare_commit_msg` hook, uncomment `"prepare_commit_msg:prepare_for_gitlab_branch"` line and comment `"prepare_commit_msg:prepare_for_ekohe_branch"` line in `.githook/config.rb` to make it work
+
+        // .githook/config
+        set :prepare_commit_msg, fetch(:prepare_commit_msg, []).push(
+          # comment following lines if you want to skip it
+          # "prepare_commit_msg:prepare_for_ekohe_branch"
+          "prepare_commit_msg:prepare_for_gitlab_branch"
+        )
 
 ## License
 
