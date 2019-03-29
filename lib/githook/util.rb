@@ -103,5 +103,25 @@ module Githook
         f.puts ori_content
       end
     end
+
+    # get changed files, include added or modified
+    def self.changed_files
+      added_or_modified_reg = /A|AM|^M/
+      `git status --porcelain`.split(/\n/).
+      select { |file_name_with_status|
+        file_name_with_status =~ added_or_modified_reg
+      }.
+      map { |file_name_with_status|
+        file_name_with_status.split(' ')[1]
+      }
+    end
+
+    def self.changed_ruby_files
+      changed_files.
+      select { |file_name|
+        File.extname(file_name) == '.rb'
+      }.
+      join(' ')
+    end
   end
 end
