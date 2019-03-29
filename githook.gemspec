@@ -1,18 +1,18 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'githook/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "git-hook"
+  spec.name          = 'git-hook'
   spec.version       = Githook::VERSION
-  spec.authors       = ["baurine"]
-  spec.email         = ["2008.hbl@gmail.com"]
+  spec.authors       = ['baurine']
+  spec.email         = ['2008.hbl@gmail.com']
 
-  spec.summary       = %q{Setup git hooks easily}
-  spec.description   = %q{Help to setup git hooks easily, base on Rake, inspired from Capistrano.}
-  spec.homepage      = "https://github.com/baurine/githook"
-  spec.license       = "MIT"
+  spec.summary       = 'Setup git hooks easily'
+  spec.description   = 'Help to setup git hooks easily, base on Rake, inspired from Capistrano.'
+  spec.homepage      = 'https://github.com/baurine/githook'
+  spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -28,9 +28,9 @@ Gem::Specification.new do |spec|
   end
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  spec.require_paths = ["lib"]
+  spec.require_paths = ['lib']
 
-  spec.add_development_dependency "bundler", "~> 1.14"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency 'bundler', '~> 1.14'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rspec', '~> 3.0'
 end

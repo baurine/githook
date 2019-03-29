@@ -4,11 +4,11 @@ module Githook
       @env ||= {}
       @env[key] = value
     end
-  
+
     def self.fetch(key, def_val)
       @env ||= {}
       @env[key] || def_val
-    end 
+    end
   end
 end
 

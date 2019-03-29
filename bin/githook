@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require "githook"
+require 'githook'
 
-task_name = ARGV[0] || "help"
+task_name = ARGV[0] || 'help'
 if Rake::Task.task_defined?(task_name)
   Rake::Task[task_name].invoke
 else

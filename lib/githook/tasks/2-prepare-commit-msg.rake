@@ -13,9 +13,9 @@ namespace :prepare_commit_msg do
       issue_num = match_group[2]
       issue_content = match_group[3]
 
-      issue_type = "BUG" if issue_type == "HOTFIX"
+      issue_type = 'BUG' if issue_type == 'HOTFIX'
       issue_num = " \##{issue_num}" unless issue_num.empty?
-      issue_content = issue_content.tr("_", " ").strip.capitalize
+      issue_content = issue_content.tr('_', ' ').strip.capitalize
 
       "#{issue_type}#{issue_num} - #{issue_content}"
     else
@@ -34,9 +34,9 @@ namespace :prepare_commit_msg do
       issue_num = match_group[1]
       issue_content = match_group[2]
 
-      issue_type = "FEATURE"
+      issue_type = 'FEATURE'
       issue_num = "\##{issue_num}"
-      issue_content = issue_content.tr("-", " ").strip.capitalize
+      issue_content = issue_content.tr('-', ' ').strip.capitalize
 
       "#{issue_type} #{issue_num} - #{issue_content}"
     else
@@ -45,7 +45,7 @@ namespace :prepare_commit_msg do
     end
   end
 
-  desc "Prepare commit msg for ekohe type branch"
+  desc 'Prepare commit msg for ekohe type branch'
   task :prepare_for_ekohe_branch do |t|
     Githook::Util.log_task(t.name)
 
@@ -54,13 +54,13 @@ namespace :prepare_commit_msg do
     if Githook::Util.commit_msg_empty?(commit_msg)
       branch_name = Githook::Util.branch_name
       pre_msg = gen_pre_msg_for_ekohe_branch(branch_name)
-      puts "pre-msg:"
+      puts 'pre-msg:'
       puts pre_msg
       Githook::Util.prefill_msg(commit_msg_file, pre_msg)
     end
   end
 
-  desc "Prepare commit msg for gitlab type branch"
+  desc 'Prepare commit msg for gitlab type branch'
   task :prepare_for_gitlab_branch do |t|
     Githook::Util.log_task(t.name)
 
@@ -69,7 +69,7 @@ namespace :prepare_commit_msg do
     if Githook::Util.commit_msg_empty?(commit_msg)
       branch_name = Githook::Util.branch_name
       pre_msg = gen_pre_msg_for_gitlab_branch(branch_name)
-      puts "pre-msg:"
+      puts 'pre-msg:'
       puts pre_msg
       Githook::Util.prefill_msg(commit_msg_file, pre_msg)
     end
