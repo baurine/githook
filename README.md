@@ -247,7 +247,11 @@ Demo:
 
 ## Releases
 
-### 1.0.8
+### 0.1.9
+
+1. Add a `changed_files` util method to get the added or modified files, to make rubocop only check changed files instead of all files.
+
+### 0.1.8
 
 1. Rename `githook clearup` command to `githook clean`
 
