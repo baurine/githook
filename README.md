@@ -247,6 +247,10 @@ Demo:
 
 ## Releases
 
+### 0.2.0
+
+1. Fix bug that rubocop will check all files if has no changed ruby file
+
 ### 0.1.9
 
 1. Add a `changed_files` util method to get the added or modified files, to make rubocop only check changed files instead of all files.
