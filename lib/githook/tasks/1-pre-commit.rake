@@ -4,7 +4,7 @@ namespace :pre_commit do
     Githook::Util.log_task(t.name)
     changed_ruby_files = Githook::Util.changed_ruby_files
     exit 0 if changed_ruby_files.empty?
-    exit 1 unless system("bundle exec rubocop #{changed_ruby_files}")
+    exit 1 unless system("bundle exec rubocop --force-exclusion #{changed_ruby_files}")
   end
 
   desc 'Test ruby code by rspec'

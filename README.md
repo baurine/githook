@@ -18,18 +18,6 @@ A ruby gem that help to setup git hooks easily, base on Rake, inspired from Capi
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'git-hook'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
     $ gem install git-hook
 
 **Notice!** The gem name isn't **githook**, it is another gem written by some guy.
@@ -246,6 +234,10 @@ Demo:
 1. [How to Build a Gem](note/how-to-build-a-gem.md)
 
 ## Releases
+
+### 0.2.1
+
+1. Add `--force-exclusion` option to rubocop command to exclude the files defined in the configuration
 
 ### 0.2.0
 
